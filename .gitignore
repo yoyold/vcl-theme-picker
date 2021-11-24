@@ -67,3 +67,5 @@ __recovery/
 
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
+/src/Win32/Debug/themepicker.dcu
+/src/Win32/Debug/ThemePickerProject.exe
