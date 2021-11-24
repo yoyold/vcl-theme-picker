@@ -9,14 +9,15 @@ uses
 type
   TVCLThemepickerDlg = class(TForm)
     MainPanel: TPanel;
-    ThemesNamesCheckListListBox: TCheckListBox;
+    ThemeNamesCheckListBox: TCheckListBox;
     ThemeLocationLbl: TLabel;
-    ChangeThemeLocationBtn: TSpeedButton;
     ConfirmBtn: TBitBtn;
     ExitBtn: TBitBtn;
+    SetThemeLocationBtn: TBitBtn;
     procedure ChangeThemeLocationBtnClick(Sender: TObject);
-    procedure ThemesNamesCheckListListBoxClickCheck(Sender: TObject);
+    procedure ThemeNamesCheckListBoxClickCheck(Sender: TObject);
     procedure ExitBtnClick(Sender: TObject);
+    procedure SetThemeLocationBtnClick(Sender: TObject);
 
   private
     procedure ChangeThemeLocation();
@@ -53,9 +54,9 @@ begin
   VCLThemepickerDlg.Close();
 end;
 
-procedure TVCLThemepickerDlg.ThemesNamesCheckListListBoxClickCheck(Sender: TObject);
+procedure TVCLThemepickerDlg.ThemeNamesCheckListBoxClickCheck(Sender: TObject);
 begin
-  FThemeName := ThemesNamesCheckListListBox.Items[ThemesNamesCheckListListBox.ItemIndex];
+  FThemeName := ThemeNamesCheckListBox.Items[ThemeNamesCheckListBox.ItemIndex];
   UncheckOtherListBoxItems();
   ChangeTheme();
 end;
@@ -81,15 +82,19 @@ procedure TVCLThemepickerDlg.FillThemeNameListBox();
 var
   LSearchrec: TSearchRec;
 begin
-  ThemesNamesCheckListListBox.Clear;
+  ThemeNamesCheckListBox.Clear;
     if FindFirst(FThemeLocation + '\*.vsf', faAnyFile, LSearchrec) = 0 then begin
       repeat
         FThemeName := TPath.GetFileNameWithoutExtension(LSearchrec.Name);
-        ThemesNamesCheckListListBox.AddItem(FThemeName, nil);
+        ThemeNamesCheckListBox.AddItem(FThemeName, nil);
       until FindNext(LSearchrec) <> 0;
       FindCLose(LSearchrec);
     end;
-      // ThemesNamesCheckListListBox.AddItem('Windows', nil);
+end;
+
+procedure TVCLThemepickerDlg.SetThemeLocationBtnClick(Sender: TObject);
+begin
+    ChangeThemeLocation();
 end;
 
 procedure TVCLThemepickerDlg.ChangeTheme();
@@ -101,9 +106,9 @@ procedure TVCLThemepickerDlg.UncheckOtherListBoxItems();
 var
   LCounter : integer;
 begin
-  for LCounter := 0 to ThemesNamesCheckListListBox.items.count-1 do begin
-    if (LCounter <> ThemesNamesCheckListListBox.ItemIndex) then
-      ThemesNamesCheckListListBox.Checked[LCounter]:= false;
+  for LCounter := 0 to ThemeNamesCheckListBox.items.count-1 do begin
+    if (LCounter <> ThemeNamesCheckListBox.ItemIndex) then
+      ThemeNamesCheckListBox.Checked[LCounter]:= false;
   end;
 end;
 

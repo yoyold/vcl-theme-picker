@@ -37,26 +37,12 @@ object VCLThemepickerDlg: TVCLThemepickerDlg
       Font.Style = []
       ParentFont = False
     end
-    object ChangeThemeLocationBtn: TSpeedButton
-      Left = 16
-      Top = 11
-      Width = 113
-      Height = 31
-      Caption = 'Change Location'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -12
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentFont = False
-      OnClick = ChangeThemeLocationBtnClick
-    end
-    object ThemesNamesCheckListListBox: TCheckListBox
+    object ThemeNamesCheckListBox: TCheckListBox
       Left = 16
       Top = 50
       Width = 443
       Height = 264
-      OnClickCheck = ThemesNamesCheckListListBoxClickCheck
+      OnClickCheck = ThemeNamesCheckListBoxClickCheck
       Anchors = [akLeft, akTop, akRight, akBottom]
       ItemHeight = 13
       TabOrder = 0
@@ -81,6 +67,16 @@ object VCLThemepickerDlg: TVCLThemepickerDlg
       ModalResult = 8
       TabOrder = 2
       OnClick = ExitBtnClick
+    end
+    object SetThemeLocationBtn: TBitBtn
+      Left = 16
+      Top = 13
+      Width = 113
+      Height = 31
+      Anchors = [akLeft, akBottom]
+      Caption = #55357#56510' Select Location'
+      TabOrder = 3
+      OnClick = SetThemeLocationBtnClick
     end
   end
 end

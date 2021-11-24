@@ -11,7 +11,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  TStyleManager.TrySetStyle('Glossy');
+  TStyleManager.TrySetStyle('Windows10');
   Application.CreateForm(TVCLThemepickerDlg, VCLThemepickerDlg);
   Application.CreateForm(TVCLThemepickerDlg, VCLThemepickerDlg);
   Application.Run;
