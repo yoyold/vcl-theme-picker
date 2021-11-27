@@ -66,7 +66,6 @@ object VCLThemepickerDlg: TVCLThemepickerDlg
       Caption = #10060' Exit'
       ModalResult = 8
       TabOrder = 2
-      OnClick = ExitBtnClick
     end
     object SetThemeLocationBtn: TBitBtn
       Left = 16

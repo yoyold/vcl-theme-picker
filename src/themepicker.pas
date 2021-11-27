@@ -14,16 +14,14 @@ type
     ConfirmBtn: TBitBtn;
     ExitBtn: TBitBtn;
     SetThemeLocationBtn: TBitBtn;
-    procedure ChangeThemeLocationBtnClick(Sender: TObject);
     procedure ThemeNamesCheckListBoxClickCheck(Sender: TObject);
-    procedure ExitBtnClick(Sender: TObject);
     procedure SetThemeLocationBtnClick(Sender: TObject);
 
   private
-    procedure ChangeThemeLocation();
-    procedure ChangeTheme();
     procedure FillThemeNameListBox();
     procedure UncheckOtherListBoxItems();
+    procedure ChangeThemeLocation();
+    procedure ChangeTheme();
 
   private
     FThemeLocation : string;
@@ -34,7 +32,7 @@ type
   end;
 
   var
-    VCLThemepickerDlg: TVCLThemepickerDlg;
+    VCLThemepickerDlg: TVCLThemepickerDlg;  // delete this when using as a modal dialog
 
 
 implementation
@@ -44,21 +42,32 @@ implementation
 uses
   VCL.FileCtrl, VCL.Themes, System.IOUtils;
 
-procedure TVCLThemepickerDlg.ChangeThemeLocationBtnClick(Sender: TObject);
-begin
-  ChangeThemeLocation();
-end;
-
-procedure TVCLThemepickerDlg.ExitBtnClick(Sender: TObject);
-begin
-  VCLThemepickerDlg.Close();
-end;
 
 procedure TVCLThemepickerDlg.ThemeNamesCheckListBoxClickCheck(Sender: TObject);
 begin
   FThemeName := ThemeNamesCheckListBox.Items[ThemeNamesCheckListBox.ItemIndex];
   UncheckOtherListBoxItems();
   ChangeTheme();
+end;
+
+procedure TVCLThemepickerDlg.UncheckOtherListBoxItems();
+var
+  LCounter : integer;
+begin
+  for LCounter := 0 to ThemeNamesCheckListBox.items.count-1 do begin
+    if (LCounter <> ThemeNamesCheckListBox.ItemIndex) then
+      ThemeNamesCheckListBox.Checked[LCounter]:= false;
+  end;
+end;
+
+procedure TVCLThemepickerDlg.ChangeTheme();
+begin
+  TStyleManager.TrySetStyle(FThemeName);
+end;
+
+procedure TVCLThemepickerDlg.SetThemeLocationBtnClick(Sender: TObject);
+begin
+  ChangeThemeLocation();
 end;
 
 procedure TVCLThemepickerDlg.ChangeThemeLocation();
@@ -90,26 +99,6 @@ begin
       until FindNext(LSearchrec) <> 0;
       FindCLose(LSearchrec);
     end;
-end;
-
-procedure TVCLThemepickerDlg.SetThemeLocationBtnClick(Sender: TObject);
-begin
-    ChangeThemeLocation();
-end;
-
-procedure TVCLThemepickerDlg.ChangeTheme();
-begin
-  TStyleManager.TrySetStyle(FThemeName);
-end;
-
-procedure TVCLThemepickerDlg.UncheckOtherListBoxItems();
-var
-  LCounter : integer;
-begin
-  for LCounter := 0 to ThemeNamesCheckListBox.items.count-1 do begin
-    if (LCounter <> ThemeNamesCheckListBox.ItemIndex) then
-      ThemeNamesCheckListBox.Checked[LCounter]:= false;
-  end;
 end;
 
 end.
