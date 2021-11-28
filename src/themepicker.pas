@@ -16,19 +16,21 @@ type
     SetThemeLocationBtn: TBitBtn;
     procedure ThemeNamesCheckListBoxClickCheck(Sender: TObject);
     procedure SetThemeLocationBtnClick(Sender: TObject);
+    procedure ConfirmBtnClick(Sender: TObject);
 
   private
     procedure FillThemeNameListBox();
     procedure UncheckOtherListBoxItems();
     procedure ChangeThemeLocation();
     procedure ChangeTheme();
+    procedure WriteRegistry();
 
   private
     FThemeLocation : string;
     FThemeName     : string;
 
   public
-    // public members
+    procedure ReadFromRegistry();
   end;
 
   var
@@ -40,7 +42,7 @@ implementation
 {$R *.dfm}
 
 uses
-  VCL.FileCtrl, VCL.Themes, System.IOUtils;
+  VCL.FileCtrl, VCL.Themes, System.IOUtils, System.Win.Registry;
 
 
 procedure TVCLThemepickerDlg.ThemeNamesCheckListBoxClickCheck(Sender: TObject);
@@ -82,6 +84,7 @@ begin
       FThemeLocation           := LocationDialog.FileName;
       ThemeLocationLbl.Caption := FThemeLocation;
       FillThemeNameListBox();
+    end;
   finally
     LocationDialog.Free;
   end;
@@ -99,6 +102,49 @@ begin
       until FindNext(LSearchrec) <> 0;
       FindCLose(LSearchrec);
     end;
+end;
+
+procedure TVCLThemepickerDlg.ConfirmBtnClick(Sender: TObject);
+begin
+  WriteRegistry();
+end;
+
+procedure TVCLThemepickerDlg.WriteRegistry();
+var
+  LRegEntry : TRegistry;
+begin
+  LRegEntry         := TRegistry.Create(KEY_WRITE);
+  LRegEntry.RootKey := HKEY_LOCAL_MACHINE;
+  try
+    LRegEntry.Access := KEY_WRITE;
+    if LRegEntry.OpenKey('Software\VCLThemePicker', true) then begin
+      LRegEntry.WriteString('ThemeName', FThemeName);
+    end;
+  finally
+    LRegEntry.CloseKey();
+    LRegEntry.Free();
+  end;
+end;
+
+// call this to set your theme at application start
+procedure TVCLThemepickerDlg.ReadFromRegistry();
+var
+  LRegEntry : TRegistry;
+begin
+  LRegEntry         := TRegistry.Create(KEY_WRITE);
+  LRegEntry.RootKey := HKEY_LOCAL_MACHINE;
+  try
+    if LRegEntry.KeyExists('Software\VCLThemePicker') then begin
+      LRegEntry.Access := KEY_READ;
+      FThemeName       := LRegEntry.ReadString('ThemeName');
+      if FThemeName <> '' then begin
+        ChangeTheme();
+      end;
+    end;
+  finally
+    LRegEntry.CloseKey();
+    LRegEntry.Free();
+  end;
 end;
 
 end.

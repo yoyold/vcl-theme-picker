@@ -56,6 +56,7 @@ object VCLThemepickerDlg: TVCLThemepickerDlg
       Caption = #9989' Confirm'
       ModalResult = 1
       TabOrder = 1
+      OnClick = ConfirmBtnClick
     end
     object ExitBtn: TBitBtn
       Left = 346
