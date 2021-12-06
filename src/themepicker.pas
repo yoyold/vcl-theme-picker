@@ -17,6 +17,7 @@ type
     procedure ThemeNamesCheckListBoxClickCheck(Sender: TObject);
     procedure SetThemeLocationBtnClick(Sender: TObject);
     procedure ConfirmBtnClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
 
   private
     procedure FillThemeNameListBox();
@@ -44,6 +45,58 @@ implementation
 uses
   VCL.FileCtrl, VCL.Themes, System.IOUtils, System.Win.Registry;
 
+
+procedure TVCLThemepickerDlg.FormCreate(Sender: TObject);
+begin
+  ReadFromRegistry();
+end;
+
+procedure TVCLThemepickerDlg.ConfirmBtnClick(Sender: TObject);
+begin
+  WriteRegistry();
+end;
+
+procedure TVCLThemepickerDlg.WriteRegistry();
+var
+  LRegEntry : TRegistry;
+begin
+  LRegEntry         := TRegistry.Create(KEY_WRITE);
+  LRegEntry.RootKey := HKEY_LOCAL_MACHINE;
+  try
+    LRegEntry.Access := KEY_WRITE;
+    LRegEntry.CreateKey('/VCLThemePicker');
+    if LRegEntry.OpenKey('\VCLThemePicker', false) then begin
+      LRegEntry.WriteString('ThemeName', FThemeName);
+    end
+    else begin
+      ShowMessage('Could not save theme: Registry key not found.');
+    end;
+  finally
+    LRegEntry.CloseKey();
+    LRegEntry.Free();
+  end;
+end;
+
+// call this to read the latest theme at application start
+procedure TVCLThemepickerDlg.ReadFromRegistry();
+var
+  LRegEntry : TRegistry;
+begin
+  LRegEntry         := TRegistry.Create(KEY_WRITE);
+  LRegEntry.RootKey := HKEY_LOCAL_MACHINE;
+  try
+    if LRegEntry.KeyExists('Software\VCLThemePicker') then begin
+      LRegEntry.Access := KEY_READ;
+      FThemeName       := LRegEntry.ReadString('ThemeName');
+      if FThemeName <> '' then begin
+        ChangeTheme();
+      end;
+    end;
+  finally
+    LRegEntry.CloseKey();
+    LRegEntry.Free();
+  end;
+end;
 
 procedure TVCLThemepickerDlg.ThemeNamesCheckListBoxClickCheck(Sender: TObject);
 begin
@@ -80,7 +133,7 @@ begin
   try
     LocationDialog.Title   := 'Select themes folder';
     LocationDialog.Options := [fdoPickFolders, fdoPathMustExist];
-    if LocationDialog.Execute then
+    if LocationDialog.Execute then begin
       FThemeLocation           := LocationDialog.FileName;
       ThemeLocationLbl.Caption := FThemeLocation;
       FillThemeNameListBox();
@@ -102,49 +155,6 @@ begin
       until FindNext(LSearchrec) <> 0;
       FindCLose(LSearchrec);
     end;
-end;
-
-procedure TVCLThemepickerDlg.ConfirmBtnClick(Sender: TObject);
-begin
-  WriteRegistry();
-end;
-
-procedure TVCLThemepickerDlg.WriteRegistry();
-var
-  LRegEntry : TRegistry;
-begin
-  LRegEntry         := TRegistry.Create(KEY_WRITE);
-  LRegEntry.RootKey := HKEY_LOCAL_MACHINE;
-  try
-    LRegEntry.Access := KEY_WRITE;
-    if LRegEntry.OpenKey('Software\VCLThemePicker', true) then begin
-      LRegEntry.WriteString('ThemeName', FThemeName);
-    end;
-  finally
-    LRegEntry.CloseKey();
-    LRegEntry.Free();
-  end;
-end;
-
-// call this to set your theme at application start
-procedure TVCLThemepickerDlg.ReadFromRegistry();
-var
-  LRegEntry : TRegistry;
-begin
-  LRegEntry         := TRegistry.Create(KEY_WRITE);
-  LRegEntry.RootKey := HKEY_LOCAL_MACHINE;
-  try
-    if LRegEntry.KeyExists('Software\VCLThemePicker') then begin
-      LRegEntry.Access := KEY_READ;
-      FThemeName       := LRegEntry.ReadString('ThemeName');
-      if FThemeName <> '' then begin
-        ChangeTheme();
-      end;
-    end;
-  finally
-    LRegEntry.CloseKey();
-    LRegEntry.Free();
-  end;
 end;
 
 end.
