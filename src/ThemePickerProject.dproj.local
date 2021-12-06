@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<BorlandProject>
-	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.494,=C:\Users\Lukas D\Documents\Embarcadero\Studio\Projekte\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.023,=D:\VCLThemePicker\src\themepicker.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.163,D:\VCLThemePicker\src\ThemePickerProject.dproj=C:\Users\Lukas D\Documents\Embarcadero\Studio\Projekte\Project1.dproj</Transaction>
-  </Transactions>
-</BorlandProject>
