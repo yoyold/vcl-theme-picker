@@ -1,3 +1,20 @@
+{
+                  ########################################################
+                  ###                                                  ###
+                  ###                Author: Lukas Dony                ###
+                  ###                                                  ###
+                  ###              Last edited: 06.12.2021             ###
+                  ###                                                  ###
+                  ###                   License: MIT                   ###
+                  ###                                                  ###
+                  ###    For more information visit the github repo    ###
+                  ###                                                  ###
+                  ###    https://github.com/yoyold/vcl-theme-picker    ###
+                  ###                                                  ###
+                  ########################################################
+}
+
+
 unit themepicker;
 
 interface
